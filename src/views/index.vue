@@ -66,80 +66,80 @@
 
 <script>
 
-  import { Bridge } from '../common/WebView'
+  import {Bridge} from '../common/WebView'
 
   export default{
-      data(){
-          return {
-              cards: [{
-                  headName: '模块1',
-                  postDatas: {
-                      id: '123',
-                      number: 'panda000'
-                  },
-                  resDatas: {
-                      id: '123',
-                      number: 'panda000'
-                  }
-              }, {
-                  headName: '模块2',
-                  postDatas: {
-                      id: '123',
-                      number: 'panda000'
-                  },
-                  resDatas: {
-                      id: '123',
-                      number: 'panda000'
-                  }
-              }, {
-                  headName: '模块3',
-                  postDatas: {
-                      id: '123',
-                      number: 'panda000'
-                  },
-                  resDatas: {
-                      id: '123',
-                      number: 'panda000'
-                  }
-              }],
+    data(){
+      return {
+        cards: [{
+          headName: '模块1',
+          postDatas: {
+            id: '123',
+            number: 'panda000'
+          },
+          resDatas: {
+            id: '123',
+            number: 'panda000'
           }
-      },
-      created(){
-          if (window.bridge) {
-              Bridge(function (bridge) {
-                  bridge.registerHandler('testJavascriptHandler', function (data, responseCallback) {
-                      //native调用js方法并返回一个responseData给native
-                      var responseData = {'Javascript Says': 'Right back atcha!'}
-                      responseCallback(responseData)
-                  })
-              })
-              let length = this.cards.length;
-              for (let i = 0; i < length; i++) {
-                  bridge.callHandler('testObjcCallback', this.cards[i].postDatas, function (responseData) {
-                      _this.cards[i].resDatas = responseData
-                  })
-              }
+        }, {
+          headName: '模块2',
+          postDatas: {
+            id: '123',
+            number: 'panda000'
+          },
+          resDatas: {
+            id: '123',
+            number: 'panda000'
           }
-
-      },
-      components: {},
-
-      methods: {
-          send (index) {
-              let _this = this;
-              let obj = {
-                  id: Date.parse(new Date()),
-                  number: parseInt(Math.random() * 10000)
-              };
-              this.cards[index].resDatas = obj;
-
-              // 调用native方法并获得native返回参数
-              if (window.bridge) {
-                  bridge.callHandler('testObjcCallback', _this.cards[index].postDatas, function (responseData) {
-                      _this.cards[index].resDatas = responseData
-                  })
-              }
+        }, {
+          headName: '模块3',
+          postDatas: {
+            id: '123',
+            number: 'panda000'
+          },
+          resDatas: {
+            id: '123',
+            number: 'panda000'
           }
+        }],
+      }
+    },
+    created(){
+      if (window.bridge) {
+        Bridge(function (bridge) {
+          bridge.registerHandler('testJavascriptHandler', function (data, responseCallback) {
+            //native调用js方法并返回一个responseData给native
+            var responseData = {'Javascript Says': 'Right back atcha!'}
+            responseCallback(responseData)
+          })
+        })
+        let length = this.cards.length;
+        for (let i = 0; i < length; i++) {
+          bridge.callHandler('testObjcCallback', this.cards[i].postDatas, function (responseData) {
+            _this.cards[i].resDatas = responseData
+          })
+        }
+      }
+
+    },
+    components: {},
+    computed: {},
+    methods: {
+      send (index) {
+        let _this = this;
+        let obj = {
+          id: Date.parse(new Date()),
+          number: parseInt(Math.random() * 10000)
+        };
+        this.cards[index].resDatas = obj;
+
+        // 调用native方法并获得native返回参数
+        if (window.bridge) {
+          bridge.callHandler('testObjcCallback', _this.cards[index].postDatas, function (responseData) {
+            _this.cards[index].resDatas = responseData
+          })
+        }
+      }
     }
   }
 
