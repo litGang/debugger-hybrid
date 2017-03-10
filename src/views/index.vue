@@ -72,73 +72,48 @@
     data(){
       return {
         cards: [{
-          headName: '模块1',
+          headName: 'hybrid.js.route',
           postDatas: {
-            id: '123',
-            number: 'panda000'
+            'md': 'PBDemoModule',
+            'fn': 'push',
+            'pm': {'url': 'https://www.baidu.com'},
+            'cb': 'hybrid.native.route.success'
           },
-          resDatas: {
-            id: '123',
-            number: 'panda000'
-          }
+          resDatas: {}
         }, {
-          headName: '模块2',
+          headName: 'hybrid.js.route',
           postDatas: {
-            id: '123',
-            number: 'panda000'
+            'md': 'PBDemoModule',
+            'fn': 'event',
+            'pm': {'foo': 'bar'},
+            'cb': 'hybrid.native.route.success'
           },
-          resDatas: {
-            id: '123',
-            number: 'panda000'
-          }
-        }, {
-          headName: '模块3',
-          postDatas: {
-            id: '123',
-            number: 'panda000'
-          },
-          resDatas: {
-            id: '123',
-            number: 'panda000'
-          }
+          resDatas: {}
         }],
       }
     },
     created(){
-      if (window.bridge) {
-        Bridge(function (bridge) {
-          bridge.registerHandler('testJavascriptHandler', function (data, responseCallback) {
-            //native调用js方法并返回一个responseData给native
-            var responseData = {'Javascript Says': 'Right back atcha!'}
-            responseCallback(responseData)
-          })
-        })
-        let length = this.cards.length;
-        for (let i = 0; i < length; i++) {
-          bridge.callHandler('testObjcCallback', this.cards[i].postDatas, function (responseData) {
-            _this.cards[i].resDatas = responseData
-          })
-        }
-      }
+//      var _this = this
+//      Bridge(function (bridge) {
+//        bridge.registerHandler('testJavascriptHandler', function (data, responseCallback) {
+//          //native调用js方法并返回一个responseData给native
+//          var responseData = {'Javascript Says': 'Right back atcha!'}
+//          responseCallback(responseData)
+//        })
+//      })
 
     },
     components: {},
     computed: {},
     methods: {
       send (index) {
-        let _this = this;
-        let obj = {
-          id: Date.parse(new Date()),
-          number: parseInt(Math.random() * 10000)
-        };
-        this.cards[index].resDatas = obj;
-
         // 调用native方法并获得native返回参数
-        if (window.bridge) {
-          bridge.callHandler('testObjcCallback', _this.cards[index].postDatas, function (responseData) {
-            _this.cards[index].resDatas = responseData
-          })
-        }
+        var _this = this;
+        Bridge(function (bridge) {
+            bridge.callHandler('hybrid.js.route', _this.cards[index].postDatas, function (responseData) {
+              _this.cards[index].resDatas = responseData
+            })
+        })
       }
     }
   }
