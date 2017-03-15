@@ -26,6 +26,15 @@
     margin: 5px;
   }
 
+  /*button{*/
+    /*font-family: inherit;*/
+    /*border:1px solid #5cadff;*/
+    /*outline: none;*/
+    /*background: white;*/
+    /*text-decoration: none;*/
+    /*touch-action: manipulation;*/
+  /*}*/
+
   .dis-inline {
     display: inline-block;
   }
@@ -50,14 +59,38 @@
     padding-top: 5px;
   }
 
-  .button {
-    float: right;
-    padding: 3px;
-    border: solid 1px gray;
-    display: inline-block;
-    border-radius: 4px;
-  }
+  .cards {
+    box-shadow: 0 2px 7px rgba(0,0,0,.15);
+    border-color: transparent;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:4px;
+    .button {
+      border:1px solid #d7dde4;
+      font-size: 15px;
+      color:#657180;
+      text-align: center;
+      width: 3.5rem;
+      float: right;
+      padding: 3px;
+      display: inline-block;
+      border-radius: 4px;
+      transition:color .15s linear,border .15s linear,transform 0.15s linear;
+      /*
 
+      */
+      -webkit-tap-highlight-color: rgba(255,255,255,255);
+      &:active{
+         transform: scale(1.1,1.1);
+         outline: 0;
+         transition: none;
+         color: #4084FF;
+         background-color: #fff;
+         border-color: #4084FF;
+       }
+
+    }
+  }
   .item {
     border-bottom1: solid 1px gray;
   }
@@ -67,29 +100,12 @@
 <script>
 
   import {Bridge} from '../common/WebView'
+  import {DATA} from '../data'
 
   export default{
     data(){
       return {
-        cards: [{
-          headName: 'hybrid.js.route',
-          postDatas: {
-            'md': 'PBDemoModule',
-            'fn': 'push',
-            'pm': {'url': 'https://www.baidu.com'},
-            'cb': 'hybrid.native.route.success'
-          },
-          resDatas: {}
-        }, {
-          headName: 'hybrid.js.route',
-          postDatas: {
-            'md': 'PBDemoModule',
-            'fn': 'event',
-            'pm': {'foo': 'bar'},
-            'cb': 'hybrid.native.route.success'
-          },
-          resDatas: {}
-        }],
+        cards:DATA.cards
       }
     },
     created(){
@@ -101,7 +117,6 @@
 //          responseCallback(responseData)
 //        })
 //      })
-
     },
     components: {},
     computed: {},
@@ -110,9 +125,9 @@
         // 调用native方法并获得native返回参数
         var _this = this;
         Bridge(function (bridge) {
-            bridge.callHandler('hybrid.js.route', _this.cards[index].postDatas, function (responseData) {
-              _this.cards[index].resDatas = responseData
-            })
+          bridge.callHandler('hybrid.js.route', _this.cards[index].postDatas, function (responseData) {
+            _this.cards[index].resDatas = responseData
+          })
         })
       }
     }
